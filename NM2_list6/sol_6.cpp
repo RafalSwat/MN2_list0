@@ -144,3 +144,92 @@ void newton_method()
 	std::cout << "max for x:                     " << x1 << std::endl;
 	std::cout << "value of function on extremum: " << f(x1) << std::endl;
 }
+void brent_method()
+{
+	double x1 = -2;
+	double x2 = 2;
+	double tol = 10e-8;
+	double M = 1000;
+	double phi = (1 + sqrt(5)) / 2;
+	double rho = 2 - phi;
+	double u = x1 + rho * (x2 - x1);
+	double v = u;
+	double w = u;
+	double x = u;
+	double fu = f(u);
+	double fv = fu;
+	double fw = fu;
+	double fx = fu;
+	double xm = 0.5 * (x1 + x2);
+	double d = 0;
+	double e = 0;
+	double iteration = 0;
+
+	double r;
+	double g;
+	double p;
+	double s;
+
+	for (int i = 1; i < M; i++)
+	{
+		if (abs(x - xm) <= tol) break;
+		bool para = abs(e) > tol;
+		if (para) // parabola fit
+		{
+			r = (x - w) * (fx - fv);
+			g = (x - v) * (fx - fw);
+			p = (x - v) * g - (x - w) * r;
+			s = 2 * (g - r);
+			if (s > 0) p = -p;
+			s = abs(s);
+			para = (abs(p) < abs(0.5 * s * e) && (p > (s * (x1 - x))) && (p < (s * (x2 - x))));
+			if (para)
+			{
+				e = d;
+				d = p / s;
+			}
+			if (!para) // golden ratio
+			{
+				if (x >= xm) e = x1 - x;
+				else e = x2 - x;
+			}
+			d = rho * e;
+		}
+		u = x + d;
+		fu = f(u);
+		if (fu <= fx)
+		{
+			if (u >= x) x1 = x;
+			else x2 = x;
+			/// virables update
+			v = w;
+			fv = fw;
+			w = x;
+			fw = fx;
+			x = u;
+			fx = fu;
+		}
+		else
+		{
+			if (u < x) x1 = u;
+			else x2 = u;
+			if ((fu <= fw) || (w == x))
+			{
+				v = w;
+				fv = fw;
+				w = u;
+				fw = fu;
+			}
+			else if ((fu < fv) || (v == x) || (v == w))
+			{
+				v = u;
+				fv = fu;
+			}
+		}
+		xm = 0.5 * (x1 + x2);
+		iteration = i;
+	}
+	std::cout << "numbers of iterations:         " << iteration << std::endl;
+	std::cout << "max for x:                     " << u << std::endl;
+	std::cout << "value of function on extremum: " << fu << std::endl;
+}
