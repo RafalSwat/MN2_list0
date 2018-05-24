@@ -7,6 +7,16 @@ double f(double x)
 {
 	return 2 * std::sin(x) - (x*x) / 10;
 }
+double df(double x)
+{
+	double dx = 10e-8;
+	return (f(x + dx) - f(x)) / dx;
+}
+double d2f(double x)
+{
+	double dx = 10e-8;
+	return ((f(x + dx) - 2 * f(x) + f(x - dx)) / (dx*dx));
+}
 void golden_ratio()
 {
 	double x_opt;
@@ -70,7 +80,7 @@ void golden_ratio()
 			std::cout << "value of function on extremum: " << fx << std::endl;
 			break;
 		}
-	}	
+	}
 }
 void interpolation()
 {
@@ -84,7 +94,7 @@ void interpolation()
 	double previous_max = 999;
 	double current_max = 0;
 
-	while(abs(current_max-previous_max) > eps && iteration < max_iter)
+	while (abs(current_max - previous_max) > eps && iteration < max_iter)
 	{
 		x3 = (f(x0)*(x1*x1 - x2 * x2) + f(x1)*(x2*x2 - x0 * x0) + f(x2) * (x0*x0 - x1 * x1)) / (2 * f(x0) * (x1 - x2) + 2 * f(x1) * (x2 - x0) + 2 * f(x2)*(x0 - x1));
 		x0 = x1;
@@ -100,4 +110,37 @@ void interpolation()
 	std::cout << "numbers of iterations:         " << iteration << std::endl;
 	std::cout << "max for x:                     " << x3 << std::endl;
 	std::cout << "value of function on extremum: " << current_max << std::endl;
+}
+void newton_method()
+{
+	int M = 100;
+	int iteration = 0;
+	double x0 = 2;
+	double x1 = 0;
+	double eps = 10e-8;
+	double delta = 10e-4;
+	double v = df(x0);
+
+	for (int k = 1; k < M; k++)
+	{
+		if (abs(v) < eps)
+		{
+			break;
+		}
+		else
+		{
+			x1 = x0 - (v / d2f(x0));
+			v = df(x1);
+
+			if (abs(x1 - x0) < delta || (abs(v) < eps))
+			{
+				break;
+			}
+			x0 = x1;
+			iteration = k;
+		}
+	}
+	std::cout << "numbers of iterations:         " << iteration << std::endl;
+	std::cout << "max for x:                     " << x1 << std::endl;
+	std::cout << "value of function on extremum: " << f(x1) << std::endl;
 }
