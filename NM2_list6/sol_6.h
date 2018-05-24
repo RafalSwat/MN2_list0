@@ -7,3 +7,4 @@ double d2f(double x);
 void golden_ratio();
 void interpolation();
 void newton_method();
+void brent_method();
