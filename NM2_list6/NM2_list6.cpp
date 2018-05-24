@@ -10,6 +10,9 @@ int main()
 	interpolation();
 	std::cout << std::endl << "----------------- NEWTON METHOD -----------------" << std::endl;
 	newton_method();
+	std::cout << std::endl << "----------------- BRENT METHOD ------------------" << std::endl;
+	brent_method();
+
 
 	system("pause");
 	return 0;
