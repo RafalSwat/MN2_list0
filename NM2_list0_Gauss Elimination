@@ -36,7 +36,7 @@ bool eliminacja_gaussa()
 	const double eps = 1e-12; // stała - przybliżenie zera
 
 	const size_t N = 5;
-	double A[N][N] = { {0,0,2,1,2},{0,1,0,2,-1},{1,2,0,-2,0},{0,0,0,-1,1},{0,1,-1,1,-1} }; // dane zad2
+	double A[N][N] = { { 0,0,2,1,2 },{ 0,1,0,2,-1 },{ 1,2,0,-2,0 },{ 0,0,0,-1,1 },{ 0,1,-1,1,-1 } }; // dane zad2
 	double b[N] = { 1,1,-4,-2,-1 }; // dane zad2
 
 	double x[N];
@@ -58,7 +58,7 @@ bool eliminacja_gaussa()
 		for (int j = 0; j < N + 1; j++)
 		{
 			Ab_copy[i][j] = Ab[i][j];
-			x[j] = Ab[i][N]; /// nie wiem o co tu chodzi ale działa, metoda prób i błędów
+			x[i] = 1.0;//Ab[i][N]; /// nie wiem o co tu chodzi ale działa, metoda prób i błędów
 		}
 	}
 	//printowanie macierzy
@@ -81,7 +81,7 @@ bool eliminacja_gaussa()
 	{
 		for (int j = i + 1; j < N; j++)
 		{
-			if (fabs(Ab_copy[i][i]) < eps) return false; //fabs zwraca wartosc absolutna
+			//if (fabs(Ab_copy[i][i]) < eps) return false; //fabs zwraca wartosc absolutna
 			m = Ab_copy[j][i] / Ab_copy[i][i];
 			for (int k = i + 1; k <= N; k++)
 			{
@@ -94,20 +94,21 @@ bool eliminacja_gaussa()
 	for (int i = N - 1; i >= 0; --i)
 	{
 		s = Ab_copy[i][N]; // do zmiennej s trafia wektor b (ostatnia kolumna macierzy)
-		for (int j = N; j >= i + 1; j--)
+		for (int j = N-1; j >= i + 1; j--)
 		{
 			s = s - Ab_copy[i][j] * x[j];
 		}
-		if (fabs(Ab_copy[i][i]) < eps) return false;
+		//if (fabs(Ab_copy[i][i]) < eps) return false;
 		x[i] = s / Ab_copy[i][i];
-		std::cout << 'x' << i << "= " << x[i] / 2.0 << std::endl;
+		std::cout << 'x' << i << "= " << x[i] << std::endl;
 	}
 	return true;
 }
 
 int main()
 {
-	eliminacja_gaussa();
+	//eliminacja_gaussa();
+	bool test = eliminacja_gaussa();
 
 
 	system("pause");
